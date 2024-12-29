@@ -35,7 +35,7 @@ You need your Instagram session ID to authenticate. This can be retrieved from y
 Clone this repository or download the script:
 https://github.com/darkrequests/darkinsta/
 ```bash
-git clone 
+git clone https://github.com/darkrequests/darkinsta.git
 cd instagram-scraper-tool
 ```
 
@@ -94,20 +94,6 @@ Following: 2 found
 - following1
 - following2
 ```
-
-## Notes
-
-- **Compliance**: Ensure you comply with Instagram's [Terms of Service](https://help.instagram.com/581066165581870) when using this tool.
-- **Privacy**: This tool can only scrape publicly accessible data or data accessible through your authenticated account.
-
-## Troubleshooting
-
-- **Login Issues**: Ensure the session ID is valid and not expired. Log in via your browser to verify.
-- **Data Not Found**: The target profile must be public, or you must have access to its data (e.g., as a follower).
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ## Disclaimer
 
