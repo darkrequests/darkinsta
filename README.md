@@ -1,3 +1,6 @@
+# For any questions 
+whatsapp me {0791258754}
+
 # Instagram Scraper Tool
 
 The Instagram Scraper Tool is a command-line application that allows users to scrape public data from Instagram profiles. Users can log in using their session ID and retrieve information such as profile details, followers, and following lists for a target username.
@@ -36,7 +39,7 @@ Clone this repository or download the script:
 https://github.com/darkrequests/darkinsta/
 ```bash
 git clone https://github.com/darkrequests/darkinsta.git
-cd instagram-scraper-tool
+cd darkinsta
 ```
 
 ## Usage
@@ -44,7 +47,7 @@ cd instagram-scraper-tool
 Run the script from the command line:
 
 ```bash
-python instagram_scraper_tool.py
+python insta.py
 ```
 
 ### Steps:
@@ -95,7 +98,7 @@ Following: 2 found
 - following2
 ```
 
-## Disclaimer
+
 
 This tool is for educational and personal use only. Use it responsibly and ensure you comply with all applicable laws and platform terms.
 
