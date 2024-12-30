@@ -63,19 +63,52 @@ def extract_profile_info(session, username):
             try:
                 data = response.json()
                 user = data.get("data", {}).get("user", {})
-                phone_number = user.get("business_contact_phone", "Not Available")
-                email = user.get("public_email", "Not Available")
-                followers = user.get("edge_followed_by", {}).get("count", "Not Available")
-                following = user.get("edge_follow", {}).get("count", "Not Available")
+                
+                profile_info = {
+                    "Username": username,
+                    "Profile ID": user.get("id"),
+                    "Profile Picture URL": user.get("profile_pic_url_hd"),
+                    "Bio": user.get("biography"),
+                    "Full Name": user.get("full_name"),
+                    "Website": user.get("external_url"),
+                    "Private Account": user.get("is_private"),
+                    "Verified Account": user.get("is_verified"),
+                    "Business Account": user.get("is_business_account"),
+                    "Gender": user.get("gender"),
+                    "Category": user.get("category_name"),
+                    "Joined Date": user.get("joined_date"),
+                    "Highlights Count": user.get("highlight_reel_count"),
+                    "Story Views Count": user.get("story_views_count"),
+                    "IGTV Videos Count": user.get("total_igtv_videos"),
+                    "Tagged Posts Count": user.get("tagged_posts_count"),
+                    "Activity Status": user.get("activity_status"),
+                    "Phone Number": user.get("business_contact_phone"),
+                    "Email": user.get("public_email"),
+                    "Followers Count": user.get("edge_followed_by", {}).get("count"),
+                    "Following Count": user.get("edge_follow", {}).get("count"),
+                    "Media Count": user.get("edge_owner_to_timeline_media", {}).get("count"),
+                    "Birthday": user.get("birthday"),
+                    "Bio Links": [entity.get("hashtag", {}).get("name") for entity in user.get("biography_with_entities", {}).get("entities", []) if entity.get("hashtag")],
+                    "Mutual Friends Count": user.get("edge_mutual_followed_by", {}).get("count"),
+                    "Recent Stories": len(user.get("edge_felix_video_timeline", {}).get("edges", [])),
+                    "Saved Collections": len(user.get("edge_saved_media", {}).get("edges", [])),
+                    "Story Highlights Count": user.get("highlight_reel_count"),
+                    "Pinned Posts Count": user.get("pinned_post_count"),
+                    "Business Contact Info": user.get("business_contact_method"),
+                    "Ad Preferences": user.get("ads_preferences"),
+                    "Activity Log": user.get("activity_feed"),
+                    "Shopping Behavior": user.get("shopping_tags"),
+                }
 
-                logging.info("\n--- Profile Information ---")
-                logging.info("Username: %s", username)
-                logging.info("Phone Number: %s", phone_number)
-                logging.info("Email: %s", email)
-                logging.info("Followers: %s", followers)
-                logging.info("Following: %s", following)
+                print("\n--- Profile Information ---")
+                for key, value in profile_info.items():
+                    print(f"{key}: {value if value else 'Could not find ' + key.lower().replace('_', ' ')}")
+
             except json.JSONDecodeError:
                 logging.error("Failed to decode JSON response.")
+            except AttributeError as e:
+                logging.error("AttributeError: %s", e)
+                logging.error("Data: %s", data)
         else:
             logging.error("Failed to fetch profile info. Status code: %d", response.status_code)
             logging.error("Response content: %s", response.content)
