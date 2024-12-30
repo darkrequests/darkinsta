@@ -1,8 +1,6 @@
 # Instagram osintTool
 ![pic](https://github.com/user-attachments/assets/8585d410-a385-4bf9-b1e8-f11d68629ae0)
 
-![insta](https://github.com/user-attachments/assets/3629a19e-1532-4a2d-b7df-50a5bf9f01a6)
-
 # Contact me
  Whatsapp{0791258754}
 ## Overview
