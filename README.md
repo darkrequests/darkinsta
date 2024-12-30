@@ -32,12 +32,12 @@ The **Instagram Scraper Tool** is a Python script that allows users to extract p
 ## Usage
 Run the script using the following format:
 ```bash
-python insta.py <session_id> <username>
+python3 insta.py <session_id> <csrf_token> <username>
 ```
 
 ### Example
 ```bash
-python insta.py YOUR_SESSION_ID target_username
+python3 insta.py YOUR_SESSION_ID CSRF_TOKEN target_username
 ```
 
 ### Input Options
