@@ -42,38 +42,16 @@ python3 insta.py YOUR_SESSION_ID CSRF_TOKEN target_username
 
 ### Input Options
 After running the script, you'll be prompted to select an option from the menu:
-- **1**: Extract profile information
-- **2**: Extract followers and following count
-- **3**: Extract both
+: Extract profile information
 
 ## Notes
 - **Session ID**: Obtain your Instagram session ID by inspecting your browser's cookies for Instagram after logging in.
 - **CSRF Token**: Automatically handled by the script.
 - This script adheres to Instagram's API limitations. Ensure you use it responsibly and within legal boundaries.
 
-## Logging
-The script logs activity and errors to the console in real-time. Adjust logging levels in the `setup_logging()` function if needed.
-
 ## Disclaimer
 This tool is intended for educational purposes only. Unauthorized scraping of data may violate Instagram's terms of service or applicable laws. Use responsibly and at your own risk.
 
-## License
-MIT License
-
-## Contributing
-1. Fork the repository
-2. Create a new branch for your feature/bugfix:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add feature/fix bug"
-   ```
-4. Push to your branch:
-   ```bash
-   git push origin feature-name
-   ```
-5. Create a pull request
+(https://files.fm/u/ycwwwzqkym)
 
 
