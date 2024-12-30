@@ -56,6 +56,4 @@ After running the script, you'll be prompted to select an option from the menu:
 ## Disclaimer
 This tool is intended for educational purposes only. Unauthorized scraping of data may violate Instagram's terms of service or applicable laws. Use responsibly and at your own risk.
 
-![Example Image](https://files.fm/u/ycwwwzqkym)
-
 
