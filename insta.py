@@ -1,8 +1,7 @@
-import os
 import logging
 import requests
 import sys
-from getpass import getpass
+import json
 
 def setup_logging():
     """Set up logging configuration."""
@@ -11,138 +10,99 @@ def setup_logging():
         format="%(asctime)s - %(levelname)s - %(message)s",
     )
 
-def initialize_session(session_id):
+def initialize_session(session_id, csrf_token):
     """Initializes a session object with session ID and CSRF token."""
     session = requests.Session()
     session.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/80.0.3987.132 Safari/537.36"
-        ),
+        "User-Agent": "Instagram 133.0.0.34.124 Android (28/9; 320dpi; 720x1280; Xiaomi; Redmi 5; rosy; qcom; en_US)",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Origin": "https://www.instagram.com",
+        "Connection": "keep-alive",
+        "Referer": "https://www.instagram.com/",
+        "TE": "trailers",
     })
-    session.cookies.set("sessionid", session_id)
-
-    # Fetch CSRF token
-    try:
-        logging.info("Fetching CSRF token...")
-        response = session.get("https://www.instagram.com")
-        csrf_token = response.cookies.get("csrftoken")
-        if csrf_token:
-            session.headers.update({"X-CSRFToken": csrf_token})
-            logging.info("CSRF token retrieved successfully.")
-        else:
-            logging.error("Failed to retrieve CSRF token.")
-    except requests.RequestException as e:
-        logging.error("An error occurred while initializing session: %s", e)
-        raise
-
+    session.cookies.update({
+        "csrftoken": csrf_token,
+        "sessionid": session_id,
+        "ig_nrcb": "1",
+    })
     return session
 
-def login_to_instagram(session):
-    """Validates Instagram session by checking login status."""
-    url = "https://www.instagram.com/accounts/login/ajax/"
+def validate_session(session):
+    """Load Instagram website to validate session."""
+    url = "https://www.instagram.com/"
     try:
-        logging.info("Validating Instagram session...")
+        logging.info("Loading Instagram website to validate session...")
         response = session.get(url)
         if response.status_code == 200:
-            logging.info("Session is valid.")
+            logging.info("Instagram website loaded successfully.")
             return True
         else:
-            logging.error("Invalid session. Please check your session ID.")
+            logging.error("Failed to load Instagram website. Status code: %d", response.status_code)
             return False
     except requests.RequestException as e:
-        logging.error("An error occurred during login validation: %s", e)
+        logging.error("An error occurred while loading Instagram website: %s", e)
         return False
 
 def extract_profile_info(session, username):
-    """Extracts Instagram profile information for a given username."""
-    url = f"https://www.instagram.com/{username}/?__a=1"
+    """
+    Extracts profile information using the user's profile page.
+    Args:
+        session (requests.Session): Authenticated session for Instagram.
+        username (str): Instagram username.
+    """
+    url = f"https://i.instagram.com/api/v1/users/web_profile_info/?username={username}"
+
     try:
         logging.info("Fetching profile information for '%s'...", username)
         response = session.get(url)
         if response.status_code == 200:
-            data = response.json()
-            user = data.get("graphql", {}).get("user", {})
-            phone_number = user.get("phone_number", "Not Available")
-            email = user.get("email", "Not Available")
+            try:
+                data = response.json()
+                user = data.get("data", {}).get("user", {})
+                phone_number = user.get("business_contact_phone", "Not Available")
+                email = user.get("public_email", "Not Available")
+                followers = user.get("edge_followed_by", {}).get("count", "Not Available")
+                following = user.get("edge_follow", {}).get("count", "Not Available")
 
-            logging.info("\n--- Profile Information ---")
-            logging.info("Username: %s", username)
-            logging.info("Phone Number: %s", phone_number)
-            logging.info("Email: %s", email)
+                logging.info("\n--- Profile Information ---")
+                logging.info("Username: %s", username)
+                logging.info("Phone Number: %s", phone_number)
+                logging.info("Email: %s", email)
+                logging.info("Followers: %s", followers)
+                logging.info("Following: %s", following)
+            except json.JSONDecodeError:
+                logging.error("Failed to decode JSON response.")
         else:
             logging.error("Failed to fetch profile info. Status code: %d", response.status_code)
+            logging.error("Response content: %s", response.content)
     except requests.RequestException as e:
         logging.error("An error occurred while fetching profile info: %s", e)
-
-def extract_followers_and_following(session, username):
-    """Extracts followers and following counts for a given username."""
-    url = f"https://www.instagram.com/{username}/"
-    try:
-        logging.info("Fetching followers and following for '%s'...", username)
-        response = session.get(url)
-        if response.status_code == 200:
-            data = response.text
-            followers_start = data.find('"edge_followed_by":{"count":') + len('"edge_followed_by":{"count":')
-            followers_end = data.find('}', followers_start)
-            followers_count = data[followers_start:followers_end]
-
-            following_start = data.find('"edge_follow":{"count":') + len('"edge_follow":{"count":')
-            following_end = data.find('}', following_start)
-            following_count = data[following_start:following_end]
-
-            logging.info("Followers: %s", followers_count)
-            logging.info("Following: %s", following_count)
-        else:
-            logging.error("Failed to fetch followers and following. Status code: %d", response.status_code)
-    except requests.RequestException as e:
-        logging.error("An error occurred while fetching followers and following: %s", e)
-
-def display_menu():
-    """Displays options to the user and prompts for a choice."""
-    print("\nOptions:")
-    print("1. Extract profile information")
-    print("2. Extract followers and following")
-    print("3. Extract both")
-    choice = input("Enter your choice (1/2/3): ").strip()
-    if choice not in {"1", "2", "3"}:
-        raise ValueError("Invalid choice. Please enter 1, 2, or 3.")
-    return int(choice)
 
 def main():
     """Main function to handle Instagram scraping."""
     setup_logging()
 
-    if len(sys.argv) < 3:
-        print("Usage: python insta.py <session_id> <username>")
+    if len(sys.argv) < 4:
+        print("Usage: python insta.py <session_id> <csrf_token> <username>")
         sys.exit(1)
 
     session_id = sys.argv[1]
-    target_username = sys.argv[2]
+    csrf_token = sys.argv[2]
+    username = sys.argv[3]
 
     try:
-        # Initialize session and validate login
-        session = initialize_session(session_id)
-        if login_to_instagram(session):
-            print("\nLogged in successfully. Proceeding to scrape data...")
-
-            # Display menu and handle user's choice
-            choice = display_menu()
-            if choice == 1:
-                extract_profile_info(session, target_username)
-            elif choice == 2:
-                extract_followers_and_following(session, target_username)
-            elif choice == 3:
-                extract_profile_info(session, target_username)
-                extract_followers_and_following(session, target_username)
-
-            print("\nScraping complete. Thank you for using the tool!")
+        session = initialize_session(session_id, csrf_token)
+        if validate_session(session):
+            logging.info("Session validated. Proceeding to fetch data...")
+            extract_profile_info(session, username)
         else:
-            print("Login failed. Please check your session ID and try again.")
+            logging.error("Failed to validate session. Please check credentials.")
     except Exception as e:
         logging.error("An error occurred: %s", e)
-        print("An error occurred. Please check the logs for details.")
 
 if __name__ == "__main__":
     main()
