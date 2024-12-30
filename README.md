@@ -1,8 +1,8 @@
-# Instagram Scraper Tool
+# Instagram osintTool
 # Contact me
  Whatsapp{0791258754}
 ## Overview
-The **Instagram Scraper Tool** is a Python script that allows users to extract public and private information from Instagram profiles using a session ID for authentication. It supports fetching:
+The **Instagram osint Tool** is a Python script that allows users to extract public and private information from Instagram profiles using a session ID for authentication. It supports fetching:
 
 - Profile details (e.g., email and phone number, if available)
 - Follower and following counts
