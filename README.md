@@ -1,104 +1,78 @@
-# For any questions 
-whatsapp me {0791258754}
-
 # Instagram Scraper Tool
+# Contact me
+ Whatsapp{0791258754}
+## Overview
+The **Instagram Scraper Tool** is a Python script that allows users to extract public and private information from Instagram profiles using a session ID for authentication. It supports fetching:
 
-The Instagram Scraper Tool is a command-line application that allows users to scrape public data from Instagram profiles. Users can log in using their session ID and retrieve information such as profile details, followers, and following lists for a target username.
+- Profile details (e.g., email and phone number, if available)
+- Follower and following counts
 
 ## Features
+- **Session Authentication**: Logs into Instagram using a session ID.
+- **Profile Data Extraction**: Retrieves basic profile information, such as phone number and email (if accessible).
+- **Followers and Following Count**: Fetches the count of followers and accounts followed by the user.
+- **Menu-Driven Interface**: Allows users to choose the type of data they wish to scrape.
 
-- **Login with Session ID**: Authenticate securely using your Instagram session ID.
-- **Profile Information Extraction**: Retrieve details like email and phone number (if available).
-- **Followers and Following List**: Fetch up to 100 followers and following for demonstration purposes (adjustable).
-- **Interactive Menu**: Choose specific actions, such as extracting profile information, followers, following, or both.
-
-## Prerequisites
-
-### 1. Python
-
-Ensure you have Python 3.8 or higher installed. You can download Python from [python.org](https://www.python.org/).
-
-### 2. Required Libraries
-
-Install the required Python libraries using pip:
-
-```bash
-pip install requests instagram-scraper
-```
-
-### 3. Session ID
-
-You need your Instagram session ID to authenticate. This can be retrieved from your browser's developer tools:
-- Log in to Instagram via your browser.
-- Open developer tools (usually `F12` or `Ctrl+Shift+I`).
-- Navigate to the "Application" tab and find the `sessionid` cookie under "Storage > Cookies".
+## Requirements
+- Python 3.7 or later
+- Internet connection
+- Valid Instagram session ID
 
 ## Installation
-
-Clone this repository or download the script:
-https://github.com/darkrequests/darkinsta/
-```bash
-git clone https://github.com/darkrequests/darkinsta.git
-cd darkinsta
-```
+1. Clone the repository or download the script:
+   ```bash
+   git clone https://github.com/darkrequests/darkinsta.git
+   cd darkinsta
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Usage
-
-Run the script from the command line:
-
+Run the script using the following format:
 ```bash
-python insta.py
+python insta.py <session_id> <username>
 ```
 
-### Steps:
-
-1. Enter your Instagram session ID when prompted.
-2. Enter the target username whose data you want to scrape.
-3. Choose an option from the menu:
-   - **1**: Extract profile information.
-   - **2**: Extract followers and following lists.
-   - **3**: Extract both profile information and followers/following.
-4. View the results in the terminal.
-
-## Configuration
-
-### Adjusting the Number of Followers/Following
-
-The script limits the number of followers and following fetched to 100 by default for demonstration. To change this:
-
-- Open the script file.
-- Locate the `extract_followers_and_following` function.
-- Modify the second parameter of `scraper.get_followers()` and `scraper.get_following()` (e.g., `10000` for maximum results).
-
-## Example Output
-
-### Profile Information:
-
-```
---- Profile Information ---
-Username: target_username
-Phone Number: Not Available
-Email: example@domain.com
+### Example
+```bash
+python insta.py YOUR_SESSION_ID target_username
 ```
 
-### Followers:
+### Input Options
+After running the script, you'll be prompted to select an option from the menu:
+- **1**: Extract profile information
+- **2**: Extract followers and following count
+- **3**: Extract both
 
-```
-Followers: 3 found
-- follower1
-- follower2
-- follower3
-```
+## Notes
+- **Session ID**: Obtain your Instagram session ID by inspecting your browser's cookies for Instagram after logging in.
+- **CSRF Token**: Automatically handled by the script.
+- This script adheres to Instagram's API limitations. Ensure you use it responsibly and within legal boundaries.
 
-### Following:
+## Logging
+The script logs activity and errors to the console in real-time. Adjust logging levels in the `setup_logging()` function if needed.
 
-```
-Following: 2 found
-- following1
-- following2
-```
+## Disclaimer
+This tool is intended for educational purposes only. Unauthorized scraping of data may violate Instagram's terms of service or applicable laws. Use responsibly and at your own risk.
 
+## License
+MIT License
 
-
-This tool is for educational and personal use only. Use it responsibly and ensure you comply with all applicable laws and platform terms.
+## Contributing
+1. Fork the repository
+2. Create a new branch for your feature/bugfix:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add feature/fix bug"
+   ```
+4. Push to your branch:
+   ```bash
+   git push origin feature-name
+   ```
+5. Create a pull request
 
